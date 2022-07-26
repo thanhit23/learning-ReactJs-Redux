@@ -1,0 +1,16 @@
+.panel {
+  padding: 10px;
+  border: 1px solid #e4e4e4;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-heading i {
+  padding: 10px;
+  font-size: 18px;
+  color: #ff4265;
+  cursor: pointer;
+}
+
