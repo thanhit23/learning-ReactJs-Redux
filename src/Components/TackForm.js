@@ -5,6 +5,7 @@ class TaskForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: null,
       name: '',
       status: true,
     }
@@ -18,9 +19,15 @@ class TaskForm extends Component {
       [name]: value,
     })
   }
-  onSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state);
+  // onSubmit = (e) => {
+  //   e.preventDefault();
+  // }
+  addProduct = () => {
+    this.props.dataProduct(this.state)
+    this.cancel();
+  }
+  cancel = () => {
+    this.setState({ name: '', status: true});
   }
   render() {
     return (
@@ -30,21 +37,42 @@ class TaskForm extends Component {
           <i className="fa-solid fa-circle-xmark" onClick={ this.closeForm }></i>
         </div>
         <div className="panel-body">
-          <form onSubmit={ this.onSubmit }>
+          {/* <form onSubmit={ this.onSubmit }> */}
             <div className="form-group">
               <label>Name :</label>
-              <input type="text" className="form-control" name="name" value={this.state.name} onChange={this.handleForm}/>
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                value={this.state.name}
+                onChange={this.handleForm}
+              />
             </div>
             <label>Status :</label>
-            <select className="form-control" required="required" name="status" value={this.state.status} onChange={this.handleForm}>
+            <select
+              className="form-control"
+              required="required"
+              name="status"
+              value={this.state.status}
+              onChange={this.handleForm}
+            >
               <option value={true}>Kích Hoạt</option>
               <option value={false}>Ẩn</option>
             </select>
             <div className="text-center">
-              <button type="submit" className="btn btn-warning">Add</button>&nbsp;
-              <button type="submit" className="btn btn-danger">Cancel</button>
+              <button
+                type="submit"
+                className="btn btn-warning"
+                onClick={this.addProduct}
+              >Add</button>
+            &nbsp;
+              <button
+                type="submit"
+                className="btn btn-danger"
+                onClick={this.cancel}
+              >Cancel</button>
             </div>
-          </form>
+          {/* </form> */}
         </div>
       </div>
     )

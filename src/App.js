@@ -24,17 +24,17 @@ class App extends Component {
   generateData() {
     const data = [
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình chán quá',
         status: true,
       },
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình chán quá',
         status: false,
       },
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình mệt vc',
         status: false,
       }
@@ -44,11 +44,24 @@ class App extends Component {
   }
   handleForm() {
     this.setState({ disForm: !this.state.disForm })
+    console.log(this.state);
   };
-
+  dataAdd = (values) => {
+    const { name, status } = values;
+    const { data } = this.state;
+    const value = {
+      id: data.length + 1,
+      name,status,
+    }
+    data.push(value)
+    this.setState({ data });
+    localStorage.setItem('data', JSON.stringify(data));
+    this.setState({ disForm: !this.state.disForm})
+    // localStorage.removeItem('data');
+  }
   render() {
     const { data, disForm } = this.state;
-    const element = disForm ? <TaskForm closeForm={() => this.handleForm()}  /> : '';
+    const element = disForm ? <TaskForm closeForm={() => this.handleForm()} dataProduct={this.dataAdd} /> : '';
     return (
       <div className="container">
         <div className="text-center">
