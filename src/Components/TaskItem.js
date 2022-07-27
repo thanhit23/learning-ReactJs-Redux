@@ -5,7 +5,7 @@ class TaskItem extends Component {
     const { data, index } = this.props;
     return (
       <tr key={ index }>
-        <td>{ data.id }</td>
+        <td>{ index + 1 }</td>
         <td>{ data.name }</td>
         <td className="text-center">
           <span className="label label-success">

@@ -21,20 +21,20 @@ class App extends Component {
     }
   }
 
-  generateData() {
+  generateData = () => {
     const data = [
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình chán quá',
         status: true,
       },
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình chán quá',
         status: false,
       },
       {
-        id: uniqueId(),
+        id: Number(uniqueId()),
         name: 'Học lập trình mệt vc',
         status: false,
       }
@@ -45,10 +45,22 @@ class App extends Component {
   handleForm() {
     this.setState({ disForm: !this.state.disForm })
   };
-
+  handleAddData = (datas) => {
+    const { name, status } = datas;
+    const { data } = this.state;
+    const db = {
+      id: data.length + 1,
+      name,
+      status,
+    }
+    data.push(db)
+    this.setState({ data });
+    localStorage.setItem('data', JSON.stringify(data));
+    this.handleForm();
+  }
   render() {
     const { data, disForm } = this.state;
-    const element = disForm ? <TaskForm closeForm={() => this.handleForm()}  /> : '';
+    const element = disForm ? <TaskForm closeForm={() => this.handleForm()} handleAddData={this.handleAddData} /> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -59,10 +71,10 @@ class App extends Component {
             { element }
           </div>
           <div className={ disForm ? "col-md-8 col-lg-8" : "col-md-12 col-lg-12"}>
-            <button type="button" className="btn btn-primary" onClick={ () => this.handleForm() }>
+            <button type="button" className="btn btn-primary" onClick={() => this.handleForm()}>
               <i className="fa fa-plus mr-5" />Add product
             </button>
-            <button type="button" className="btn btn-primary" onClick={ () => this.generateData() }>
+            <button type="button" className="btn btn-primary" onClick={this.generateData()}>
               <i className="fa fa-plus mr-5" />Render data
             </button>
             <Control />
