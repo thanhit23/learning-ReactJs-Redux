@@ -21,7 +21,7 @@ class App extends Component {
     }
   }
 
-  generateData() {
+  generateData = () => {
     const data = [
       {
         id: Number(uniqueId()),
@@ -44,24 +44,23 @@ class App extends Component {
   }
   handleForm() {
     this.setState({ disForm: !this.state.disForm })
-    console.log(this.state);
   };
-  dataAdd = (values) => {
-    const { name, status } = values;
+  handleAddData = (datas) => {
+    const { name, status } = datas;
     const { data } = this.state;
-    const value = {
+    const db = {
       id: data.length + 1,
-      name,status,
+      name,
+      status,
     }
-    data.push(value)
+    data.push(db)
     this.setState({ data });
     localStorage.setItem('data', JSON.stringify(data));
-    this.setState({ disForm: !this.state.disForm})
-    // localStorage.removeItem('data');
+    this.handleForm();
   }
   render() {
     const { data, disForm } = this.state;
-    const element = disForm ? <TaskForm closeForm={() => this.handleForm()} dataProduct={this.dataAdd} /> : '';
+    const element = disForm ? <TaskForm closeForm={() => this.handleForm()} handleAddData={this.handleAddData} /> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -72,10 +71,10 @@ class App extends Component {
             { element }
           </div>
           <div className={ disForm ? "col-md-8 col-lg-8" : "col-md-12 col-lg-12"}>
-            <button type="button" className="btn btn-primary" onClick={ () => this.handleForm() }>
+            <button type="button" className="btn btn-primary" onClick={() => this.handleForm()}>
               <i className="fa fa-plus mr-5" />Add product
             </button>
-            <button type="button" className="btn btn-primary" onClick={ () => this.generateData() }>
+            <button type="button" className="btn btn-primary" onClick={this.generateData()}>
               <i className="fa fa-plus mr-5" />Render data
             </button>
             <Control />

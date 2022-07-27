@@ -23,7 +23,7 @@ class TaskForm extends Component {
   //   e.preventDefault();
   // }
   addProduct = () => {
-    this.props.dataProduct(this.state)
+    this.props.handleAddData(this.state)
     this.cancel();
   }
   cancel = () => {
