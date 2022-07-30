@@ -17,7 +17,7 @@ class TaskList extends Component {
         />
       )
     })
-    const dataSelect = [
+    const selectData = [
       {
         title: 'Tất cả',
         className: 'btn'
@@ -29,7 +29,7 @@ class TaskList extends Component {
         title: 'Kích Hoạt',
       }
     ]
-    const selectInputElement = dataSelect.map((data, index) => {
+    const selectInputElement = selectData.map((data, index) => {
       return (
         <SelectInput key={index} data={ data } index={ index }/>
       )

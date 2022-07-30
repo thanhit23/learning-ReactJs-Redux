@@ -43,8 +43,8 @@ class App extends Component {
 
   updateStatus = (id) => {
     const { data } = this.state;
-    const index = this.findProductById(id);
-    if (index !== null) {
+    const index = this.getIndexOfProductByProductId(id);
+    if (index) {
       data[index].status = !data[index].status;
     }
     this.setState({ data })
@@ -53,20 +53,21 @@ class App extends Component {
 
   editProduct = (id) => {
     const { data } = this.state;
-    const index = this.findProductById(id);
-    const editForm = data[index]
-    this.setState({ editForm, disForm: true });
-    console.log(editForm);
-    if (index === '') {
-      console.log(index);
-    } else {
-      console.log(index, 'index');
+    const index = this.getIndexOfProductByProductId(id);
+    if (index) {
+      const editForm = data[index]
+      this.setState({ editForm, disForm: true });
+      if (index === null) {
+        console.log(index);
+      } else {
+        console.log(index, 'index');
+      }
     }
   }
 
   deleteProduct = (id) => {
     const { data } = this.state;
-    const index = this.findProductById(id);
+    const index = this.getIndexOfProductByProductId(id);
     if (index !== null) {
       data.splice(index, 1);
     }
@@ -74,15 +75,9 @@ class App extends Component {
     localStorage.setItem('data', JSON.stringify(data))
   }
 
-  findProductById = (id) => {
+  getIndexOfProductByProductId = (id) => {
     const { data } = this.state;
-    let result = null;
-    data.forEach((value, index) => {
-      if (value.id === id) {
-        result = index;
-      }
-    })
-
+    const result = data.findIndex( e => e.id === id );
     return result;
   }
 

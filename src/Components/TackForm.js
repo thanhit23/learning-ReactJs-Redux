@@ -15,11 +15,7 @@ class TaskForm extends Component {
     const { editProduct } = this.props;
     if (editProduct) {
       const { id, name, status } = editProduct
-      this.setState({
-        id,
-        name,
-        status,
-      })
+      this.setState(editProduct)
     };
   }
   toggleForm = () => {
@@ -40,17 +36,18 @@ class TaskForm extends Component {
   }
   addProduct = () => {
     this.props.handleAddData(this.state)
-    this.cancelValueInput();
+    this.cancelInputValue();
   }
-  cancelValueInput = () => {
+  cancelInputValue = () => {
     this.setState({ name: '', status: true});
   }
   render() {
+    const { id, name, status } = this.state;
     console.log(this.state, 'this.state');
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
-          <h3 className="panel-title">{ (this.state.id !== null) ? 'Update product' : 'Add product' }</h3>
+          <h3 className="panel-title">{ (id !== null) ? 'Update product' : 'Add product' }</h3>
           <i className="fa-solid fa-circle-xmark" onClick={ this.toggleForm }></i>
         </div>
         <div className="panel-body">
@@ -60,7 +57,7 @@ class TaskForm extends Component {
               type="text"
               className="form-control"
               name="name"
-              value={this.state.name}
+              value={name}
               onChange={this.changeValueInput}
             />
           </div>
@@ -69,24 +66,24 @@ class TaskForm extends Component {
             className="form-control"
             required="required"
             name="status"
-            value={this.state.status}
+            value={status}
             onChange={this.changeValueInput}
           >
             <option value={true}>Kích Hoạt</option>
             <option value={false}>Ẩn</option>
           </select>
           <div className="text-center">
-            <button
+          <button
               type="submit"
-              className="btn btn-warning"
-              onClick={(this.state.id !== null) ? this.addProduct : this.editProduct}
-            >Add</button>
+              className="btn btn-danger"
+              onClick={this.cancelInputValue}
+            >Cancel</button>
           &nbsp;
             <button
               type="submit"
-              className="btn btn-danger"
-              onClick={this.cancelValueInput}
-            >Cancel</button>
+              className="btn btn-warning"
+              onClick={(id !== null) ? this.addProduct : this.editProduct}
+            >{(id !== null) ? 'Add' : 'Save change'}</button>
           </div>
         </div>
       </div>
