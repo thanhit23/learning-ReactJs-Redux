@@ -8,71 +8,86 @@ class TaskForm extends Component {
       id: null,
       name: '',
       status: true,
+      edit: null,
     }
   }
-  closeForm = () => {
-    this.props.closeForm();
+  componentWillMount() {
+    const { editProduct } = this.props;
+    if (editProduct) {
+      const { id, name, status } = editProduct
+      this.setState({
+        id,
+        name,
+        status,
+      })
+    };
   }
-  handleForm = event => {
-    const {target: { name, value } } = event;
+  toggleForm = () => {
+    console.log(this.editProduct());
+    this.props.toggleForm();
+  }
+
+  editProduct = () => {
+    
+    console.log(this.state.id);
+    // console.log(this.props.editProduct(), 'this.props.editProduct()');;
+  }
+  changeValueInput = event => {
+    const { target: { name, value } } = event;
     this.setState({
       [name]: value,
     })
   }
-  // onSubmit = (e) => {
-  //   e.preventDefault();
-  // }
   addProduct = () => {
     this.props.handleAddData(this.state)
-    this.cancel();
+    this.cancelValueInput();
   }
-  cancel = () => {
+  cancelValueInput = () => {
     this.setState({ name: '', status: true});
   }
   render() {
+    console.log(this.state, 'this.state');
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
-          <h3 className="panel-title">Add product</h3>
-          <i className="fa-solid fa-circle-xmark" onClick={ this.closeForm }></i>
+          <h3 className="panel-title">{ (this.state.id !== null) ? 'Update product' : 'Add product' }</h3>
+          <i className="fa-solid fa-circle-xmark" onClick={ this.toggleForm }></i>
         </div>
         <div className="panel-body">
-          {/* <form onSubmit={ this.onSubmit }> */}
-            <div className="form-group">
-              <label>Name :</label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                value={this.state.name}
-                onChange={this.handleForm}
-              />
-            </div>
-            <label>Status :</label>
-            <select
+          <div className="form-group">
+            <label>Name :</label>
+            <input
+              type="text"
               className="form-control"
-              required="required"
-              name="status"
-              value={this.state.status}
-              onChange={this.handleForm}
-            >
-              <option value={true}>Kích Hoạt</option>
-              <option value={false}>Ẩn</option>
-            </select>
-            <div className="text-center">
-              <button
-                type="submit"
-                className="btn btn-warning"
-                onClick={this.addProduct}
-              >Add</button>
-            &nbsp;
-              <button
-                type="submit"
-                className="btn btn-danger"
-                onClick={this.cancel}
-              >Cancel</button>
-            </div>
-          {/* </form> */}
+              name="name"
+              value={this.state.name}
+              onChange={this.changeValueInput}
+            />
+          </div>
+          <label>Status :</label>
+          <select
+            className="form-control"
+            required="required"
+            name="status"
+            value={this.state.status}
+            onChange={this.changeValueInput}
+          >
+            <option value={true}>Kích Hoạt</option>
+            <option value={false}>Ẩn</option>
+          </select>
+          <div className="text-center">
+            <button
+              type="submit"
+              className="btn btn-warning"
+              onClick={(this.state.id !== null) ? this.addProduct : this.editProduct}
+            >Add</button>
+          &nbsp;
+            <button
+              type="submit"
+              className="btn btn-danger"
+              onClick={this.cancelValueInput}
+            >Cancel</button>
+          </div>
         </div>
       </div>
     )
