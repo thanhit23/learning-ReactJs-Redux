@@ -1,12 +1,37 @@
 import React, { Component } from 'react';
 import TaskItem from './TaskItem';
+import SelectInput from './SelectInput';
 
 class TaskList extends Component {
   render() {
     const { data } = this.props;
     const itemElement = data.map((item, index) => {
       return (
-        <TaskItem key={index} data={ item } index={ index }/>
+        <TaskItem
+          key={ index }
+          data={ item }
+          index={ index }
+          updateStatus={ this.props.updateStatus }
+          deleteProduct={ this.props.deleteProduct }
+          editProduct={ this.props.editProduct }
+        />
+      )
+    })
+    const selectData = [
+      {
+        title: 'Tất cả',
+        className: 'btn'
+      },
+      {
+        title: 'Ẩn',
+      },
+      {
+        title: 'Kích Hoạt',
+      }
+    ]
+    const selectInputElement = selectData.map((data, index) => {
+      return (
+        <SelectInput key={index} data={ data } index={ index }/>
       )
     })
     return (
@@ -27,9 +52,7 @@ class TaskList extends Component {
             </td>
             <td>
               <select className="form-control">
-                <option value={-1}>Tất Cả</option>
-                <option value={0}>Ẩn</option>
-                <option value={1}>Kích Hoạt</option>
+                { selectInputElement }
               </select>
             </td>
             <td />
