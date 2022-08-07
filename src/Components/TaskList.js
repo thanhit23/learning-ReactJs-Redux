@@ -3,6 +3,27 @@ import TaskItem from './TaskItem';
 import SelectInput from './SelectInput';
 
 class TaskList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterName: ' ',
+      filterStatus: 0,
+    }
+  }
+
+  changeValueFilterByValue = (e) => {
+    const { filterName, filterStatus } = this.state;
+    const { value, name } = e.target;
+
+    this.props.getValueFilter(
+      name === 'filterName' ? value : filterName,
+      name === 'filterStatus' ? value : filterStatus,
+    )
+    this.setState({
+      [name]: value,
+    })
+  }
+
   render() {
     const { data } = this.props;
     const itemElement = data.map((item, index) => {
@@ -31,7 +52,7 @@ class TaskList extends Component {
     ]
     const selectInputElement = selectData.map((data, index) => {
       return (
-        <SelectInput key={index} data={ data } index={ index }/>
+        <SelectInput key={ index } data={ data } index={ index }/>
       )
     })
     return (
@@ -48,10 +69,15 @@ class TaskList extends Component {
           <tr>
             <td />
             <td>
-              <input type="text" className="form-control" />
+              <input 
+                type="text"
+                onChange={ this.changeValueFilterByValue } 
+                className="form-control"
+                name="filterName"
+              />
             </td>
             <td>
-              <select className="form-control">
+              <select className="form-control" name="filterStatus" onChange={ this.changeValueFilterByValue }>
                 { selectInputElement }
               </select>
             </td>

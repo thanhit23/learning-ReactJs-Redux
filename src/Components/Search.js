@@ -1,20 +1,48 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class Search extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      keyWord: '',
+    }
+  }
+
+  searchKeyword = ({ target: { name, value } }) => {
+    this.setState({ [name]: value })
+  }
+
+  onSearchKeyword = () => {
+    const { keyWord } = this.state
+    this.props.searchKeywords(keyWord)
+  }
+
   render() {
+    const { keyWord } = this.state
     return (
       <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div className="input-group">
-          <input type="text" className="form-control" placeholder="Nhập từ khóa..." />
+          <input
+            type="text"
+            name="keyWord"
+            className="form-control"
+            placeholder="Nhập từ khóa..."
+            value={ keyWord }
+            onChange={ this.searchKeyword }
+          />
           <span className="input-group-btn">
-            <button className="btn btn-primary" type="button">
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={ this.onSearchKeyword }
+            >
               <span className="fa fa-search mr-5" />Tìm
             </button>
           </span>
         </div>
       </div>
-    );
-  };
+    )
+  }
 }
 
 export default Search;
