@@ -22,7 +22,10 @@ class TaskItem extends Component {
         <td>{ index + 1 }</td>
         <td>{ data.name }</td>
         <td className="text-center">
-          <span className={cl('btn', {'btn-success': data.status, 'btn-danger': !data.status})} onClick={ this.updateStatus }>
+          <span 
+            className={cl('btn', {'btn-success': data.status, 'btn-danger': !data.status})} 
+            onClick={ this.updateStatus }
+          >
           { data.status ? 'Kích Hoạt' : 'Ẩn' }
           </span>
         </td>

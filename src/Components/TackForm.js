@@ -12,21 +12,38 @@ class TaskForm extends Component {
     }
   }
   componentWillMount() {
-    const { editProduct } = this.props;
-    if (editProduct) {
-      const { id, name, status } = editProduct
-      this.setState(editProduct)
+    const { editForm } = this.props;
+    if (editForm) {
+      this.setState(editForm)
     };
   }
+  // UNSAFE_componentWillMount(nextProps) {
+  //   const { editProduct } = nextProps;
+  //   if (nextProps && editProduct) {
+  //     this.setState(editProduct);
+  //   }
+  // }
+  componentWillReceiveProps(nextProps) {
+    const { editForm } = nextProps;
+    if (!nextProps) return;
+    if (editForm) {
+      this.setState(editForm);
+    } else if (editForm === null) {
+      this.setState({
+        id: null,
+        name: '',
+        status: true,
+      });
+    }
+  }
   toggleForm = () => {
-    console.log(this.editProduct());
     this.props.toggleForm();
   }
 
-  editProduct = () => {
-    
-    console.log(this.state.id);
-    // console.log(this.props.editProduct(), 'this.props.editProduct()');;
+  editDataProduct = () => {
+    const { id, name, status } = this.state
+    this.setState({ id, name, status })
+    this.props.editDataProduct(this.state)
   }
   changeValueInput = event => {
     const { target: { name, value } } = event;
@@ -43,7 +60,6 @@ class TaskForm extends Component {
   }
   render() {
     const { id, name, status } = this.state;
-    console.log(this.state, 'this.state');
     return (
       <div className="panel panel-warning">
         <div className="panel-heading">
@@ -82,8 +98,8 @@ class TaskForm extends Component {
             <button
               type="submit"
               className="btn btn-warning"
-              onClick={(id !== null) ? this.addProduct : this.editProduct}
-            >{(id !== null) ? 'Add' : 'Save change'}</button>
+              onClick={(id !== null) ? this.editDataProduct : this.addProduct }
+            >{(id !== null) ? 'Save change' : 'Add'}</button>
           </div>
         </div>
       </div>

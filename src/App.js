@@ -12,6 +12,11 @@ class App extends Component {
       data: [],
       disForm: false,
       editForm: null,
+      filter: {
+        name: '',
+        value: 0,
+      },
+      keyWord: '',
     }
   }
 
@@ -23,20 +28,24 @@ class App extends Component {
   }
 
   toggleForm = () => {
-    this.setState({ disForm: !this.state.disForm })
+    const { disForm, editForm } = this.state;
+    if (disForm && editForm !== null) {
+      this.setState({ disForm: true, editForm: null })
+    } else {
+      this.setState({ disForm: !disForm, editForm: null })
+    }
   }
 
-  handleAddData = (datas) => {
-    const { name, status } = datas;
+  handleAddData = (dataAdd) => {
+    const { name, status } = dataAdd;
     const { data } = this.state;
     const db = {
       id: data.length + 1,
       name,
-      status,
+      status: (!status || status === "false") ? false : true,
     }
     data.push(db)
     this.setState({ ...this.state, data});
-
     localStorage.setItem('data', JSON.stringify(data));
     this.toggleForm();
   }
@@ -44,7 +53,8 @@ class App extends Component {
   updateStatus = (id) => {
     const { data } = this.state;
     const index = this.getIndexOfProductByProductId(id);
-    if (index) {
+
+    if (index || index === 0) {
       data[index].status = !data[index].status;
     }
     this.setState({ data })
@@ -52,17 +62,35 @@ class App extends Component {
   }
 
   editProduct = (id) => {
-    const { data } = this.state;
+    console.log("editProduct");
+    const { data, editForm } = this.state;
     const index = this.getIndexOfProductByProductId(id);
-    if (index) {
+    console.log(editForm, 'editForm');
+    console.log(data, 'data');
+    this.setState({ editForm })
+
+    if (index || index === 0) {
       const editForm = data[index]
-      this.setState({ editForm, disForm: true });
-      if (index === null) {
-        console.log(index);
-      } else {
-        console.log(index, 'index');
-      }
+      this.setState({ editForm, disForm: true })
+      // if (index !== null || index === 0) {
+      //   console.log(index, 'index')
+      // } else {
+      //   data[index] = 
+      // }
     }
+  }
+
+  editDataProduct = (dataEdit) => {
+    const { data } = this.state
+    const { id, name, status } = dataEdit
+    const index = this.getIndexOfProductByProductId(dataEdit.id);
+    if (index || index === 0) {
+      data[index].id = id;
+      data[index].name = name;
+      data[index].status = status;
+    }
+    this.setState({ data }) 
+    localStorage.setItem('data', JSON.stringify(data));
   }
 
   deleteProduct = (id) => {
@@ -81,9 +109,49 @@ class App extends Component {
     return result;
   }
 
+  getValueFilter = (name, status) => {
+    status = Number(status);
+    name = name.toLowerCase();
+    this.setState({
+      filter: {
+        name,
+        status,
+      }
+    })
+  }
+
+  searchKeywords = (keyWord) => {
+    this.setState({ keyWord })
+  }
+
   render() {
-    const { data, disForm, editForm } = this.state;
-    const element = disForm ? <TaskForm toggleForm={this.toggleForm} handleAddData={this.handleAddData} editProduct={editForm} /> : '';
+    let { data, disForm, editForm, filter, keyWord } = this.state;
+    const { name, status } = filter;
+    if (filter) {
+      if (name) {
+        data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(name) !== -1)
+      }
+      
+      if (status) {
+        data = data.filter(({ status : nameStatus }) => {
+          if (status === 0) {
+            return data;
+          } else {
+            return nameStatus === (status === 1 ? false : true)
+          }
+        })
+      }
+    }
+
+    if (keyWord) {
+      data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(keyWord) !== -1)
+    }
+    const element = disForm ? <TaskForm 
+                                toggleForm={this.toggleForm} 
+                                handleAddData={this.handleAddData} 
+                                editForm={editForm} 
+                                editDataProduct={this.editDataProduct}
+                              /> : '';
     const colShowProductForm = disForm ? '8' : '12';
     return (
       <div className="container">
@@ -98,7 +166,7 @@ class App extends Component {
             <button type="button" className="btn btn-primary" onClick={this.toggleForm}>
               <i className="fa fa-plus mr-5" />Add product
             </button>
-            <Control />
+            <Control searchKeywords={ this.searchKeywords }/>
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList
@@ -106,6 +174,7 @@ class App extends Component {
                   updateStatus={ this.updateStatus }
                   deleteProduct={ this.deleteProduct }
                   editProduct={ this.editProduct }
+                  getValueFilter={ this.getValueFilter }
                 />
               </div>
             </div>
