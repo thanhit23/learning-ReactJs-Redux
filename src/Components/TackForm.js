@@ -88,7 +88,7 @@ class TaskForm extends Component {
             <option value={true}>Kích Hoạt</option>
             <option value={false}>Ẩn</option>
           </select>
-          <div className="text-center">
+          <div className="text-center mt-2">
           <button
               type="submit"
               className="btn btn-danger"

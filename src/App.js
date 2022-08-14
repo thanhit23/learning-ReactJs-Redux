@@ -5,6 +5,7 @@ import Control from './Components/Control';
 import TaskList from './Components/TaskList';
 import cl from 'classnames';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +17,11 @@ class App extends Component {
         name: '',
         value: 0,
       },
-      keyWord: '',
+      keyword: '',
+      sort: {
+        by: 'name',
+        value: 1,
+      },
     }
   }
 
@@ -72,11 +77,6 @@ class App extends Component {
     if (index || index === 0) {
       const editForm = data[index]
       this.setState({ editForm, disForm: true })
-      // if (index !== null || index === 0) {
-      //   console.log(index, 'index')
-      // } else {
-      //   data[index] = 
-      // }
     }
   }
 
@@ -120,13 +120,24 @@ class App extends Component {
     })
   }
 
-  searchKeywords = (keyWord) => {
-    this.setState({ keyWord })
+  searchKeywords = (keyword) => {
+    this.setState({ keyword })
+  }
+
+  sortNameOnChange = (data) => {
+    const { by, value } = data
+    this.setState({
+      sort: {
+        by,
+        value,
+      },
+    })
   }
 
   render() {
-    let { data, disForm, editForm, filter, keyWord } = this.state;
+    let { data, disForm, editForm, filter, keyWord, sort } = this.state;
     const { name, status } = filter;
+    const { by, value : valueSort } = sort;
     if (filter) {
       if (name) {
         data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(name) !== -1)
@@ -146,6 +157,21 @@ class App extends Component {
     if (keyWord) {
       data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(keyWord) !== -1)
     }
+
+    if (by === 'name') {
+      data.sort((a, b) => {
+        if (a.name > b.name) return -valueSort
+        else if (a.name < b.name) return valueSort
+        else return 0;
+      })
+    } else {
+      data.sort((a, b) => {
+        if (a.status > b.status) return -valueSort
+        else if (a.status < b.status) return valueSort
+        else return 0;
+      })
+    }
+
     const element = disForm ? <TaskForm 
                                 toggleForm={this.toggleForm} 
                                 handleAddData={this.handleAddData} 
@@ -166,7 +192,7 @@ class App extends Component {
             <button type="button" className="btn btn-primary" onClick={this.toggleForm}>
               <i className="fa fa-plus mr-5" />Add product
             </button>
-            <Control searchKeywords={ this.searchKeywords }/>
+            <Control searchKeywords={ this.searchKeywords } sortNameOnChange={ this.sortNameOnChange }/>
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList
