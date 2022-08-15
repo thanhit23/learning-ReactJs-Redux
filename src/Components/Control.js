@@ -9,9 +9,9 @@ class Control extends Component {
 
   render() {
     return (
-      <div className="row mt-15">
+      <div className="row mt-15 my-3">
         <Search searchKeywords={ this.props.searchKeywords }/>
-        <Sort />
+        <Sort sortNameOnChange={ this.props.sortNameOnChange }/>
       </div>
     );
   }
