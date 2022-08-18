@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TaskItem from './TaskItem';
 import SelectInput from './SelectInput';
+import { connect } from "react-redux";
 
 class TaskList extends Component {
   constructor(props) {
@@ -25,6 +26,8 @@ class TaskList extends Component {
   }
 
   render() {
+    console.log(this.props.data, 'props.data')
+
     const { data } = this.props;
     const itemElement = data.map((item, index) => {
       return (
@@ -89,5 +92,11 @@ class TaskList extends Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  const { data } = state
+  return {
+    data,
+  }
+}
 
-export default TaskList;
+export default connect(mapStateToProps, null)(TaskList);

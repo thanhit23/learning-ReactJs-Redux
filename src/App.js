@@ -4,14 +4,13 @@ import TaskForm from './Components/TackForm';
 import Control from './Components/Control';
 import TaskList from './Components/TaskList';
 import cl from 'classnames';
-
+import { connect } from 'react-redux'
+import * as actions from './actions/index'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      disForm: false,
       editForm: null,
       filter: {
         name: '',
@@ -23,36 +22,6 @@ class App extends Component {
         value: 1,
       },
     }
-  }
-
-  componentDidMount() {
-    if (localStorage && localStorage.getItem('data')) {
-      const data = JSON.parse(localStorage.getItem('data'))
-      this.setState({ data });
-    }
-  }
-
-  toggleForm = () => {
-    const { disForm, editForm } = this.state;
-    if (disForm && editForm !== null) {
-      this.setState({ disForm: true, editForm: null })
-    } else {
-      this.setState({ disForm: !disForm, editForm: null })
-    }
-  }
-
-  handleAddData = (dataAdd) => {
-    const { name, status } = dataAdd;
-    const { data } = this.state;
-    const db = {
-      id: data.length + 1,
-      name,
-      status: (!status || status === "false") ? false : true,
-    }
-    data.push(db)
-    this.setState({ ...this.state, data});
-    localStorage.setItem('data', JSON.stringify(data));
-    this.toggleForm();
   }
 
   updateStatus = (id) => {
@@ -135,9 +104,10 @@ class App extends Component {
   }
 
   render() {
-    let { data, disForm, editForm, filter, keyWord, sort } = this.state;
+    let { data, editForm, filter, keyWord } = this.state;
+    const { isDisForm } = this.props
     const { name, status } = filter;
-    const { by, value : valueSort } = sort;
+    // const { by, value : valueSort } = sort;
     if (filter) {
       if (name) {
         data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(name) !== -1)
@@ -158,45 +128,42 @@ class App extends Component {
       data = data.filter(({ name : nameItem }) => nameItem.toLowerCase().indexOf(keyWord) !== -1)
     }
 
-    if (by === 'name') {
-      data.sort((a, b) => {
-        if (a.name > b.name) return -valueSort
-        else if (a.name < b.name) return valueSort
-        else return 0;
-      })
-    } else {
-      data.sort((a, b) => {
-        if (a.status > b.status) return -valueSort
-        else if (a.status < b.status) return valueSort
-        else return 0;
-      })
-    }
+    // if (by === 'name') {
+    //   data.sort((a, b) => {
+    //     if (a.name > b.name) return -valueSort
+    //     else if (a.name < b.name) return valueSort
+    //     else return 0;
+    //   })
+    // } else {
+    //   data.sort((a, b) => {
+    //     if (a.status > b.status) return -valueSort
+    //     else if (a.status < b.status) return valueSort
+    //     else return 0;
+    //   })
+    // }
 
-    const element = disForm ? <TaskForm 
-                                toggleForm={this.toggleForm} 
-                                handleAddData={this.handleAddData} 
+    const element = isDisForm ? <TaskForm
                                 editForm={editForm} 
                                 editDataProduct={this.editDataProduct}
                               /> : '';
-    const colShowProductForm = disForm ? '8' : '12';
+    const colShowProductForm = isDisForm ? '8' : '12';
     return (
       <div className="container">
         <div className="text-center">
           <h1>Products Management</h1>
         </div>
         <div className="row">
-          <div className={ disForm ? "col-md-4 col-lg-4" : "" }>
+          <div className={ isDisForm ? "col-md-4 col-lg-4" : "" }>
             { element }
           </div>
           <div className={cl([`col-md-${colShowProductForm}`], [`col-lg-${colShowProductForm}`])}>
-            <button type="button" className="btn btn-primary" onClick={this.toggleForm}>
+            <button type="button" className="btn btn-primary" onClick={ this.props.onToggleForm }>
               <i className="fa fa-plus mr-5" />Add product
             </button>
             <Control searchKeywords={ this.searchKeywords } sortNameOnChange={ this.sortNameOnChange }/>
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList
-                  data={ data }
                   updateStatus={ this.updateStatus }
                   deleteProduct={ this.deleteProduct }
                   editProduct={ this.editProduct }
@@ -211,4 +178,15 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = ({ isDisForm }) => {
+  return {
+    isDisForm,
+  }
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onToggleForm: () => dispatch(actions.toggleForm())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import cl from 'classnames';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index'
 
 class TaskItem extends Component {
 
@@ -12,8 +14,13 @@ class TaskItem extends Component {
     this.props.editProduct(id)
   }
   updateStatus = () => {
-    const { data: { id } } = this.props;
-    this.props.updateStatus(id)
+    const { data } = this.props;
+    const { id } = data;
+    // const index = findIndex(data, id)
+    // console.log(index, 'index');
+    // this.props.updateStatus(id)
+    this.props.onUpdateStatus(id)
+    // return id;
   }
   render() {
     const { data, index } = this.props;
@@ -41,5 +48,16 @@ class TaskItem extends Component {
     )
   }
 }
+const mapStateToProps = state => {
+  console.log(state, 'state');
+  return {
+    
+  }
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onUpdateStatus: (id) => dispatch(actions.updateStatus(id)),
+  }
+}
 
-export default TaskItem;
+export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

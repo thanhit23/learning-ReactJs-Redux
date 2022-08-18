@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as actions from "../actions/index"
+
 import ("../css/taskForm.css");
 
 class TaskForm extends Component {
@@ -17,12 +20,7 @@ class TaskForm extends Component {
       this.setState(editForm)
     };
   }
-  // UNSAFE_componentWillMount(nextProps) {
-  //   const { editProduct } = nextProps;
-  //   if (nextProps && editProduct) {
-  //     this.setState(editProduct);
-  //   }
-  // }
+
   componentWillReceiveProps(nextProps) {
     const { editForm } = nextProps;
     if (!nextProps) return;
@@ -35,9 +33,6 @@ class TaskForm extends Component {
         status: true,
       });
     }
-  }
-  toggleForm = () => {
-    this.props.toggleForm();
   }
 
   editDataProduct = () => {
@@ -64,7 +59,7 @@ class TaskForm extends Component {
       <div className="panel panel-warning">
         <div className="panel-heading">
           <h3 className="panel-title">{ (id !== null) ? 'Update product' : 'Add product' }</h3>
-          <i className="fa-solid fa-circle-xmark" onClick={ this.toggleForm }></i>
+          <i className="fa-solid fa-circle-xmark" onClick={ this.props.onCloseForm }></i>
         </div>
         <div className="panel-body">
           <div className="form-group">
@@ -106,5 +101,16 @@ class TaskForm extends Component {
     )
   };
 }
+const mapStateToProps = state => {
+  return {
 
-export default TaskForm;
+  }
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    handleAddData: task => dispatch(actions.addProduct(task)),
+    onCloseForm: () => dispatch(actions.closeForm())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);
