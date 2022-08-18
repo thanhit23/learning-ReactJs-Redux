@@ -24,17 +24,6 @@ class App extends Component {
     }
   }
 
-  updateStatus = (id) => {
-    const { data } = this.state;
-    const index = this.getIndexOfProductByProductId(id);
-
-    if (index || index === 0) {
-      data[index].status = !data[index].status;
-    }
-    this.setState({ data })
-    localStorage.setItem('data', JSON.stringify(data))
-  }
-
   editProduct = (id) => {
     console.log("editProduct");
     const { data, editForm } = this.state;
@@ -62,15 +51,15 @@ class App extends Component {
     localStorage.setItem('data', JSON.stringify(data));
   }
 
-  deleteProduct = (id) => {
-    const { data } = this.state;
-    const index = this.getIndexOfProductByProductId(id);
-    if (index !== null) {
-      data.splice(index, 1);
-    }
-    this.setState({ data , disForm: false})
-    localStorage.setItem('data', JSON.stringify(data))
-  }
+  // deleteProduct = (id) => {
+  //   const { data } = this.state;
+  //   const index = this.getIndexOfProductByProductId(id);
+  //   if (index !== null) {
+  //     data.splice(index, 1);
+  //   }
+  //   this.setState({ data , disForm: false})
+  //   localStorage.setItem('data', JSON.stringify(data))
+  // }
 
   getIndexOfProductByProductId = (id) => {
     const { data } = this.state;
@@ -164,8 +153,6 @@ class App extends Component {
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList
-                  updateStatus={ this.updateStatus }
-                  deleteProduct={ this.deleteProduct }
                   editProduct={ this.editProduct }
                   getValueFilter={ this.getValueFilter }
                 />
