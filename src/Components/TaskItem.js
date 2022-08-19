@@ -7,33 +7,30 @@ class TaskItem extends Component {
 
   deleteProduct = () => {
     const { data: { id } } = this.props;
-    this.props.deleteProduct(id);
+    this.props.onDeleteProduct(id);
   }
   editProduct = () => {
     const { data: { id } } = this.props;
-    this.props.editProduct(id)
+    this.props.onUpdateProduct(id)
   }
   updateStatus = () => {
-    const { data } = this.props;
-    const { id } = data;
-    // const index = findIndex(data, id)
-    // console.log(index, 'index');
-    // this.props.updateStatus(id)
+    const { data: { id } } = this.props;
     this.props.onUpdateStatus(id)
-    // return id;
   }
+
+
   render() {
-    const { data, index } = this.props;
+    const { data : { name, status }, index } = this.props;
     return (
       <tr key={ index }>
         <td>{ index + 1 }</td>
-        <td>{ data.name }</td>
+        <td>{ name }</td>
         <td className="text-center">
           <span 
-            className={cl('btn', {'btn-success': data.status, 'btn-danger': !data.status})} 
+            className={cl('btn', {'btn-success': status, 'btn-danger': !status})}
             onClick={ this.updateStatus }
           >
-          { data.status ? 'Kích Hoạt' : 'Ẩn' }
+          { status ? 'Kích Hoạt' : 'Ẩn' }
           </span>
         </td>
         <td className="text-center">
@@ -49,14 +46,19 @@ class TaskItem extends Component {
   }
 }
 const mapStateToProps = state => {
-  console.log(state, 'state');
+  // console.log(state, 'state');
   return {
-    
+    onUpdateStatus: {
+      // type:
+    }
   }
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onUpdateStatus: (id) => dispatch(actions.updateStatus(id)),
+    onDeleteProduct: (id) => dispatch(actions.deleteProduct(id)),
+    onUpdateProduct: (id) => dispatch(actions.updateProduct(id)),
+
   }
 }
 

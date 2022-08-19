@@ -26,8 +26,6 @@ class TaskList extends Component {
   }
 
   render() {
-    console.log(this.props.data, 'props.data')
-
     const { data } = this.props;
     const itemElement = data.map((item, index) => {
       return (
@@ -35,8 +33,6 @@ class TaskList extends Component {
           key={ index }
           data={ item }
           index={ index }
-          updateStatus={ this.props.updateStatus }
-          deleteProduct={ this.props.deleteProduct }
           editProduct={ this.props.editProduct }
         />
       )

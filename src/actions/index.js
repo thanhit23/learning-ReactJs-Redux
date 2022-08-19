@@ -4,7 +4,7 @@ export const listAll = () => {
         type: types.listAll,
     }
 }
-export const addProduct = (task) => {
+export const addProduct = task => {
     return {
         type: types.addProduct,
         task,
@@ -25,9 +25,21 @@ export const closeForm = () => {
         type: types.closeForm,
     }
 }
-export const updateStatus = (id) => {
+export const updateStatus = id => {
     return {
         type: types.updateStatus,
+        id,
+    }
+}
+export const deleteProduct = id => {
+    return {
+        type: types.deleteProduct,
+        id,
+    }
+}
+export const updateProduct = id => {
+    return {
+        type: types.updateProduct,
         id,
     }
 }

@@ -1,5 +1,5 @@
 import * as types from "../consts/index"
-import { findIndex } from 'lodash';
+import { findIndex, remove } from 'lodash';
 const data = JSON.parse(localStorage.getItem("data"))
 const initState = data ? data : []
 
@@ -20,10 +20,15 @@ const taskReducer = (state = initState, action) => {
             return [...state];
         case types.updateStatus:
             const { id : idStatus } = action;
-            console.log(idStatus, 'idStatus')
-            console.log(state, 'state')
-            console.log(findIndex(state,  ), 'findIndex(state, idStatus)')
-            return state;
+            const index = findIndex(state, ['id', idStatus])
+            state[index].status = !state[index].status
+            localStorage.setItem('data', JSON.stringify(state))
+            return [...state];
+        case types.deleteProduct:
+            const { id : idProduct } = action;
+            remove(state, ({ id }) => id === idProduct )
+            localStorage.setItem('data', JSON.stringify(state))
+            return [...state];
         default:
             return state;
     }
