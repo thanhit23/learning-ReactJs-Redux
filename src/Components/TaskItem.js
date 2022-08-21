@@ -6,18 +6,18 @@ import * as actions from '../actions/index'
 class TaskItem extends Component {
 
   deleteProduct = () => {
-    const { data: { id } } = this.props;
-    this.props.onDeleteProduct(id);
+    const { data: { id }, onDeleteProduct } = this.props;
+    onDeleteProduct(id);
   }
   editProduct = () => {
-    const { data: { id } } = this.props;
-    this.props.onUpdateProduct(id)
+    const { data, onOpenForm, onEditProduct } = this.props;
+    onOpenForm();
+    onEditProduct(data)
   }
   updateStatus = () => {
-    const { data: { id } } = this.props;
-    this.props.onUpdateStatus(id)
+    const { data: { id }, onUpdateStatus } = this.props;
+    onUpdateStatus(id)
   }
-
 
   render() {
     const { data : { name, status }, index } = this.props;
@@ -45,21 +45,23 @@ class TaskItem extends Component {
     )
   }
 }
-const mapStateToProps = state => {
-  // console.log(state, 'state');
+const mapStateToProps = ({ data }) => {
   return {
-    onUpdateStatus: {
-      // type:
-    }
+    // ,
   }
+
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onUpdateStatus: (id) => dispatch(actions.updateStatus(id)),
-    onDeleteProduct: (id) => dispatch(actions.deleteProduct(id)),
-    onUpdateProduct: (id) => dispatch(actions.updateProduct(id)),
-
+    onUpdateStatus: id => dispatch(actions.updateStatus(id)),
+    onDeleteProduct: id => dispatch(actions.deleteProduct(id)),
+    onEditProduct: data => dispatch(actions.editProduct(data)),
+    onOpenForm: () => dispatch(actions.openForm()),
   }
 }
+const TaskItemComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(TaskItem)
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);
+export default TaskItemComponent;

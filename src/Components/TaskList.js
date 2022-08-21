@@ -26,14 +26,14 @@ class TaskList extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, editProduct } = this.props;
     const itemElement = data.map((item, index) => {
       return (
         <TaskItem
           key={ index }
           data={ item }
           index={ index }
-          editProduct={ this.props.editProduct }
+          editProduct={ editProduct }
         />
       )
     })
@@ -88,11 +88,20 @@ class TaskList extends Component {
     )
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { data } = state
   return {
     data,
   }
 }
+const mapDispatchToProps = (dispatch, props) => {
+  return {
 
-export default connect(mapStateToProps, null)(TaskList);
+  }
+}
+const TaskListComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    )(TaskList)
+
+export default TaskListComponent;

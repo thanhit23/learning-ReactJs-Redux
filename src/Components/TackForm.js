@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions/index"
-
 import ("../css/taskForm.css");
 
 class TaskForm extends Component {
@@ -10,27 +9,29 @@ class TaskForm extends Component {
     this.state = {
       id: null,
       name: '',
-      status: true,
-      edit: null,
+      status: false,
+      originData: {
+        id: null,
+        name: '',
+        status: false
+      },
     }
   }
-  componentWillMount() {
-    const { editForm } = this.props;
-    if (editForm) {
-      this.setState(editForm)
-    };
-  }
 
-  componentWillReceiveProps(nextProps) {
-    const { editForm } = nextProps;
+  componentWillReceiveProps(nextProps ) {
     if (!nextProps) return;
-    if (editForm) {
-      this.setState(editForm);
-    } else if (editForm === null) {
+    const { originData } = this.state
+    const { isEditProduct } = nextProps;
+    if (isEditProduct) {
+      this.setState({
+        originData: isEditProduct ? isEditProduct : originData
+      })
+      this.setState(isEditProduct);
+    } else if (isEditProduct === null) {
       this.setState({
         id: null,
         name: '',
-        status: true,
+        status: false,
       });
     }
   }
@@ -46,71 +47,100 @@ class TaskForm extends Component {
       [name]: value,
     })
   }
-  addProduct = () => {
-    this.props.handleAddData(this.state)
-    this.cancelInputValue();
+  onSave = () => {
+    const { handleSaveProduct, onCloseForm } = this.props
+    const { id, name, status } = this.state
+    handleSaveProduct({
+      id,
+      name,
+      status: status === 'true' ? true : false
+    })
+    onCloseForm()
+    this.resetToOriginal();
   }
-  cancelInputValue = () => {
-    this.setState({ name: '', status: true});
+  resetToOriginal = () => {
+    const originData = this.state
+    this.setState({
+      originData,
+    });
   }
   render() {
+    const { isDisForm } = this.props
+    if (!isDisForm) return null;
+    const { onCloseForm } = this.props
     const { id, name, status } = this.state;
+
     return (
-      <div className="panel panel-warning">
-        <div className="panel-heading">
-          <h3 className="panel-title">{ (id !== null) ? 'Update product' : 'Add product' }</h3>
-          <i className="fa-solid fa-circle-xmark" onClick={ this.props.onCloseForm }></i>
-        </div>
-        <div className="panel-body">
-          <div className="form-group">
-            <label>Name :</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={name}
-              onChange={this.changeValueInput}
-            />
-          </div>
-          <label>Status :</label>
-          <select
-            className="form-control"
-            required="required"
-            name="status"
-            value={status}
-            onChange={this.changeValueInput}
-          >
-            <option value={true}>Kích Hoạt</option>
-            <option value={false}>Ẩn</option>
-          </select>
-          <div className="text-center mt-2">
-          <button
-              type="submit"
-              className="btn btn-danger"
-              onClick={this.cancelInputValue}
-            >Cancel</button>
-          &nbsp;
-            <button
-              type="submit"
-              className="btn btn-warning"
-              onClick={(id !== null) ? this.editDataProduct : this.addProduct }
-            >{(id !== null) ? 'Save change' : 'Add'}</button>
+      <div id="modal-1" className="modal" tabIndex="-1" style={{display: 'block'}}>
+        <div className="col-md-4 modal-dialog modal-custom  col-lg-4">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 className="panel-title">{ (id !== null) ? 'Update product' : 'Add product' }</h3>
+              <i className="btn-close-form fa-solid fa-circle-xmark" onClick={ onCloseForm }></i>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Name :</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    name="name"
+                    value={name}
+                    onChange={ this.changeValueInput }
+                />
+              </div>
+              <label>Status :</label>
+              <select
+                className="form-control"
+                required="required"
+                name="status"
+                value={status}
+                onChange={ this.changeValueInput }
+              >
+                <option value={ true }>Kích Hoạt</option>
+                <option value={ false }>Ẩn</option>
+              </select>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="submit"
+                className="btn btn-danger"
+                onClick={ onCloseForm }
+              >Cancel</button>
+              &nbsp;
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={ this.resetToOriginal }
+              >Reset</button>
+              &nbsp;
+              <button
+                type="submit"
+                className="btn btn-warning"
+                onClick={ this.onSave }
+              >{(id !== null) ? 'Save change' : 'Add'}</button>
+            </div>
           </div>
         </div>
       </div>
     )
   };
 }
-const mapStateToProps = state => {
+const mapStateToProps = ({ isDisForm, isEditProduct }) => {
   return {
-
+    isDisForm,
+    isEditProduct,
   }
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    handleAddData: task => dispatch(actions.addProduct(task)),
+    handleSaveProduct: task => dispatch(actions.saveProduct(task)),
     onCloseForm: () => dispatch(actions.closeForm())
   }
 }
+const TaskFormComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(TaskForm)
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);
+export default TaskFormComponent;

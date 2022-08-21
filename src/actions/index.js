@@ -1,45 +1,51 @@
 import * as types from "../consts"
+
 export const listAll = () => {
     return {
-        type: types.listAll,
+        type: types.LIST_ALL,
     }
 }
-export const addProduct = task => {
+export const saveProduct = task => {
     return {
-        type: types.addProduct,
+        type: types.PRODUCT_SAVE,
         task,
     }
 }
 export const toggleForm = () => {
     return {
-        type: types.toggleForm,
+        type: types.FORM_TOGGLE,
     }
 }
 export const openForm = () => {
     return {
-        type: types.openForm,
+        type: types.FORM_OPEN,
     }
 }
 export const closeForm = () => {
     return {
-        type: types.closeForm,
+        type: types.FORM_CLOSE,
     }
 }
 export const updateStatus = id => {
     return {
-        type: types.updateStatus,
+        type: types.PRODUCT_UPDATE_STATUS,
         id,
     }
 }
 export const deleteProduct = id => {
     return {
-        type: types.deleteProduct,
+        type: types.PRODUCT_DELETE,
         id,
     }
 }
-export const updateProduct = id => {
+export const editProduct = data => {
     return {
-        type: types.updateProduct,
-        id,
+        type: types.EDIT_PRODUCT_ITEM,
+        data,
+    }
+}
+export const clearForm = () => {
+    return {
+        type: types.FORM_CLEAR,
     }
 }
