@@ -7,10 +7,21 @@
   align-items: center;
   justify-content: space-between;
 }
-.panel-heading i {
+.btn-close-form {
   padding: 10px;
   font-size: 18px;
   color: #ff4265;
   cursor: pointer;
 }
-
+#modal-1 {
+  display: block !important;
+  background-color: rgba(0,0,0,0.3) !important;
+}
+.modal-custom {
+  width: 33.33333333% !important;
+  margin: 0 !important;
+  position: absolute !important;
+  top: 15% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
