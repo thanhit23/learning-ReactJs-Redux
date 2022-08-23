@@ -49,3 +49,9 @@ export const clearForm = () => {
         type: types.FORM_CLEAR,
     }
 }
+export const filterTask = filter => {
+    return {
+        type: types.FILTER_TASK,
+        filter,
+    }
+}

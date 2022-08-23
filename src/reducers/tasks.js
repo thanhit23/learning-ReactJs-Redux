@@ -14,9 +14,14 @@ const taskReducer = (state = initState, action) => {
                 name,
                 status,
             }
-            if (!task.id) {
-                const id = state.length + 1
-                task.id = id
+            let { id : idTask } = task
+            if (!idTask) {
+                if (state.length > 0) {
+                    const { id } = state.at(-1)
+                    idTask = id + 1
+                } else {
+                    idTask = 1
+                }
                 state.push(task)
             } else {
                 const indexUpdate = findIndex(state, ['id', task.id])
