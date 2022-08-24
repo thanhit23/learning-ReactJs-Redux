@@ -1,12 +1,12 @@
-import * as types from "../consts/index"
+import * as types from '../consts/index'
 const initState = {
-    name: '',
+    name: "",
     status: 0,
 }
 
 const filterProductReducer = (state = initState, { type, filter }) => {
     switch (type) {
-        case types.FILTER_TASK:
+        case types.PRODUCT_FILTER:
             return filter;
         default:
             return state;

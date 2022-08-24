@@ -26,6 +26,7 @@ class TaskForm extends Component {
       this.setState({
         originData: isEditProduct ? isEditProduct : originData
       })
+      console.log(isEditProduct, 'isEditProduct')
       this.setState(isEditProduct);
     } else if (isEditProduct === null) {
       this.setState({
@@ -42,7 +43,10 @@ class TaskForm extends Component {
     this.props.editDataProduct(this.state)
   }
   changeValueInput = event => {
-    const { target: { name, value } } = event;
+    let { target: { name, value } } = event;
+    if (name === 'status') {
+      value = Boolean(value)
+    }
     this.setState({
       [name]: value,
     })
@@ -53,7 +57,7 @@ class TaskForm extends Component {
     handleSaveProduct({
       id,
       name,
-      status: status === 'true' ? true : false
+      status: (status === 'true' || status) ? true : false,
     })
     onCloseForm()
     this.resetToOriginal();
@@ -64,6 +68,7 @@ class TaskForm extends Component {
       originData,
     });
   }
+
   render() {
     const { isDisForm } = this.props
     if (!isDisForm) return null;
@@ -132,7 +137,7 @@ const mapStateToProps = ({ isDisForm, isEditProduct }) => {
     isEditProduct,
   }
 }
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = dispatch => {
   return {
     handleSaveProduct: task => dispatch(actions.saveProduct(task)),
     onCloseForm: () => dispatch(actions.closeForm())

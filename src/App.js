@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import './App.css';
-import TaskForm from './Components/TackForm';
-import Control from './Components/Control';
-import TaskList from './Components/TaskList';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+
+import './App.css'
+import TaskForm from './Components/TackForm'
+import Control from './Components/Control'
+import TaskList from './Components/TaskList'
 import * as actions from './actions/index'
 
 class App extends Component {
@@ -17,17 +18,6 @@ class App extends Component {
       },
     }
   }
-
-  // getValueFilter = (name, status) => {
-  //   status = Number(status);
-  //   name = name.toLowerCase();
-  //   this.setState({
-  //     filter: {
-  //       name,
-  //       status,
-  //     }
-  //   })
-  // }
 
   searchKeywords = (keyword) => {
     this.setState({ keyword })
@@ -50,7 +40,6 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <div className="container">
         <div className="text-center">
@@ -62,7 +51,7 @@ class App extends Component {
             <button type="button" className="btn btn-primary" onClick={ this.addProduct }>
               <i className="fa fa-plus mr-5" />Add product
             </button>
-            <Control searchKeywords={ this.searchKeywords } sortNameOnChange={ this.sortNameOnChange }/>
+            <Control/>
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList/>
@@ -75,7 +64,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ isDisForm, isEditProduct, isClearForm }) => {
+const mapStateToProps = (state) => {
+  const { isDisForm, isEditProduct, isClearForm } = state
   return {
     isDisForm,
     isEditProduct,
@@ -84,7 +74,7 @@ const mapStateToProps = ({ isDisForm, isEditProduct, isClearForm }) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onOpenForm: () => {dispatch(actions.openForm())},
+    onOpenForm: () => dispatch(actions.openForm()),
     onClearForm: () => dispatch(actions.clearForm()),
   }
 }

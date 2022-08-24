@@ -1,4 +1,4 @@
-import * as types from "../consts"
+import * as types from '../consts'
 
 export const listAll = () => {
     return {
@@ -7,13 +7,8 @@ export const listAll = () => {
 }
 export const saveProduct = task => {
     return {
-        type: types.PRODUCT_SAVE,
+        type: types.PRODUCT_ADD_OR_UPDATE,
         task,
-    }
-}
-export const toggleForm = () => {
-    return {
-        type: types.FORM_TOGGLE,
     }
 }
 export const openForm = () => {
@@ -49,9 +44,21 @@ export const clearForm = () => {
         type: types.FORM_CLEAR,
     }
 }
-export const filterTask = filter => {
+export const filterProduct = filter => {
     return {
-        type: types.FILTER_TASK,
+        type: types.PRODUCT_FILTER,
         filter,
+    }
+}
+export const searchProduct = keyword => {
+    return {
+        type: types.PRODUCT_SEARCH,
+        keyword,
+    }
+}
+export const sortProduct = valueSort => {
+    return {
+        type: types.PRODUCT_SORT,
+        valueSort,
     }
 }

@@ -1,10 +1,11 @@
 export const LIST_ALL = 'LIST_ALL';
-export const PRODUCT_SAVE = 'PRODUCT_SAVE';
-export const FORM_TOGGLE = 'FORM_TOGGLE';
+export const PRODUCT_ADD_OR_UPDATE = 'PRODUCT_ADD_OR_UPDATE';
 export const FORM_OPEN = 'FORM_OPEN';
 export const FORM_CLOSE = 'FORM_CLOSE';
 export const PRODUCT_UPDATE_STATUS = 'PRODUCT_UPDATE_STATUS';
 export const PRODUCT_DELETE = 'PRODUCT_DELETE';
 export const EDIT_PRODUCT_ITEM = 'EDIT_PRODUCT_ITEM';
 export const FORM_CLEAR = 'FORM_CLEAR';
-export const FILTER_TASK = 'FILTER_TASK';
+export const PRODUCT_FILTER = 'PRODUCT_FILTER';
+export const PRODUCT_SEARCH = 'PRODUCT_SEARCH';
+export const PRODUCT_SORT = 'PRODUCT_SORT';
