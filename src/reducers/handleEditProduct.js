@@ -1,7 +1,7 @@
-import * as types from "../consts/index"
+import * as types from '../consts/index'
 const initState = {
     id: null,
-    name: '',
+    name: " ",
     status: false,
 }
 
